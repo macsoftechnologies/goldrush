@@ -27,6 +27,8 @@ export class Product extends Document{
     priority: string
     @Prop()
     storeId: string
+    @Prop()
+    goldType: string
 }
 
 export const productSchema = SchemaFactory.createForClass(Product);

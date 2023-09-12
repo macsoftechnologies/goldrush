@@ -19,4 +19,6 @@ export class productDto{
     priority: string
     @ApiProperty()
     storeId: string
+    @ApiProperty()
+    goldType: string
 }

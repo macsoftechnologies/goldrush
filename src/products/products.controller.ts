@@ -144,6 +144,20 @@ export class ProductsController {
     }
   }
 
+  @UseGuards(JwtGuard)
+  @Post('/getproductbygoldtype')
+  async getProductByGoldType(@Body() req: productDto) {
+    try{
+      const getproduct = await this.productsService.getProductsByGoLdType(req);
+      return getproduct
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
   @UseGuards(JwtGuard, RolesGuard)
   @Roles(Role.ADMIN,Role.STORE)
   @Post('/updateproduct')
