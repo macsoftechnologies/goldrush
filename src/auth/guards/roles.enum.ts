@@ -3,3 +3,7 @@ export enum Role {
     ADMIN = 'admin',
     STORE = 'store'
 }
+export enum ProductStatus{
+    AVAILABLE = 'available',
+    NONAVAILABLE = 'nonavailable'
+}

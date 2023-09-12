@@ -365,7 +365,7 @@ export class UserService {
         return {
           statusCode: HttpStatus.OK,
           message: "List of Stores",
-          usersList: list,
+          storesList: list,
         }
       } else{
         return {
