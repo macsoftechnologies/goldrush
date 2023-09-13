@@ -5,12 +5,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Category } from './schema/category.schema';
 import { productDto } from './dto/products.dto';
 import { categoryDto } from './dto/category.dto';
+import { SelectedProducts } from './schema/selectedProducts.schema';
+import { selectedProductsDto } from './dto/selectedProducts.dto';
+
+var moment = require('moment');
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private readonly productModel: Model<Product>,
     @InjectModel(Category.name) private readonly categoryModel: Model<Category>,
+    @InjectModel(SelectedProducts.name)
+    private readonly selectedProductModel: Model<SelectedProducts>,
   ) {}
 
   async addCategory(req: categoryDto) {
@@ -279,7 +285,7 @@ export class ProductsService {
 
   async getProductsByGoLdType(req: productDto) {
     try {
-        const regexPattern = new RegExp(req.goldType, 'i');
+      const regexPattern = new RegExp(req.goldType, 'i');
       const list = await this.productModel.aggregate([
         { $match: { goldType: { $regex: regexPattern } } },
         {
@@ -299,7 +305,7 @@ export class ProductsService {
           },
         },
       ]);
-      if (list.length>0) {
+      if (list.length > 0) {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Products based on goldtype',
@@ -427,6 +433,304 @@ export class ProductsService {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
       };
+    }
+  }
+
+  async addSelectedProduct(req: selectedProductsDto) {
+    try {
+      const findProduct = await this.selectedProductModel.findOne({
+        $and: [
+          { selectedProduct: req.selectedProduct },
+          { userId: req.userId },
+        ],
+      });
+      if (!findProduct) {
+        req.date = moment(req.createdAt).format('DD-MM-YYYY');
+        req.time = moment(req.createdAt).format('hh:mm:ss');
+        const addSelectProduct = await this.selectedProductModel.create(req);
+        if (addSelectProduct) {
+          return {
+            statusCode: HttpStatus.OK,
+            message: 'Product Selected Successfully',
+            selectedProductDetails: addSelectProduct,
+          };
+        } else {
+          return {
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'Invalid Request',
+          };
+        }
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Product Already selected',
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async getselectedproducts() {
+    try {
+      const list = await this.selectedProductModel.aggregate([
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'selectedProduct',
+            foreignField: 'productId',
+            as: 'selectedProduct',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'userId',
+          },
+        },
+        {
+          $lookup: {
+            from: 'stores',
+            localField: 'storeId',
+            foreignField: 'storeId',
+            as: 'storeId',
+          },
+        },
+      ]);
+      if (list.length > 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'List of selected Products',
+          selctedProductsList: list,
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Invalid Request',
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async getselectedproductsbyid(req: selectedProductsDto) {
+    try {
+      const list = await this.selectedProductModel.aggregate([
+        { $match: { selectedProductId: req.selectedProductId } },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'selectedProduct',
+            foreignField: 'productId',
+            as: 'selectedProduct',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'userId',
+          },
+        },
+        {
+          $lookup: {
+            from: 'stores',
+            localField: 'storeId',
+            foreignField: 'storeId',
+            as: 'storeId',
+          },
+        },
+      ]);
+      if (list.length > 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'List of selected Product',
+          selctedProductsList: list,
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Invalid Request',
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async getselectedproductsofuser(req: selectedProductsDto) {
+    try {
+      const list = await this.selectedProductModel.aggregate([
+        { $match: { userId: req.userId } },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'selectedProduct',
+            foreignField: 'productId',
+            as: 'selectedProduct',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'userId',
+          },
+        },
+        {
+          $lookup: {
+            from: 'stores',
+            localField: 'storeId',
+            foreignField: 'storeId',
+            as: 'storeId',
+          },
+        },
+      ]);
+      if (list.length > 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'List of selected Products of User',
+          selctedProductsList: list,
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Invalid Request',
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async getselectedproductsofstore(req: selectedProductsDto) {
+    try {
+      const list = await this.selectedProductModel.aggregate([
+        { $match: { storeId: req.storeId } },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'selectedProduct',
+            foreignField: 'productId',
+            as: 'selectedProduct',
+          },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: 'userId',
+            as: 'userId',
+          },
+        },
+        {
+          $lookup: {
+            from: 'stores',
+            localField: 'storeId',
+            foreignField: 'storeId',
+            as: 'storeId',
+          },
+        },
+      ]);
+      if (list.length > 0) {
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'List of selected Products of Store',
+          selctedProductsList: list,
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Invalid Request',
+        };
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async updateSelectedProduct(req: selectedProductsDto) {
+    try {
+      const findProduct = await this.selectedProductModel.findOne({
+        selectedProductId: req.selectedProductId,
+      });
+      if (findProduct) {
+        const moderate = await this.selectedProductModel.updateOne(
+          { selectedProductId: req.selectedProductId },
+          {
+            $set: { requestStatus: req.requestStatus },
+          },
+        );
+        if (moderate) {
+          return {
+            statusCode: HttpStatus.OK,
+            message:
+              'Selected Product Status has Chnaged to ${req.requestStatus}',
+            updatedStatus: moderate,
+          };
+        } else {
+          return {
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'Request Status has Not Changed',
+          };
+        }
+      }
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      };
+    }
+  }
+
+  async deleteSelectedProduct(req: selectedProductsDto){
+    try{
+        const findProduct = await this.selectedProductModel.findOne({selectedProductId: req.selectedProductId});
+        if(findProduct) {
+            const eliminate = await this.selectedProductModel.deleteOne({selectedProductId: req.selectedProductId});
+            if(eliminate) {
+                return {
+                    statusCode: HttpStatus.OK,
+                    message: "Selected Product Deleted",
+                    deleteStatus: eliminate,
+                }
+            } else {
+                return {
+                    statusCode: HttpStatus.BAD_REQUEST,
+                    message: "Invalid Request",
+                }
+            }
+        } else {
+            return {
+                statusCode: HttpStatus.NOT_FOUND,
+                message: "Selected Product Not Found",
+            }
+        }
+    } catch(error) {
+        return {
+            statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+            message: error,
+        }
     }
   }
 }

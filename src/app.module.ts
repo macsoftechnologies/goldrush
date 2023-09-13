@@ -10,6 +10,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { ProductsModule } from './products/products.module';
 import { OffersModule } from './offers/offers.module';
+import { OthersModule } from './others/others.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { OffersModule } from './offers/offers.module';
     }),
     ProductsModule,
     OffersModule,
+    OthersModule,
   ],
   controllers: [AppController],
   providers: [

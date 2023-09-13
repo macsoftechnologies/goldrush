@@ -9,6 +9,7 @@ import { JwtGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/auth/guards/roles.decorator';
 import { Role } from 'src/auth/guards/roles.enum';
+import { selectedProductsDto } from './dto/selectedProducts.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -210,6 +211,107 @@ export class ProductsController {
   async deleteProduct(@Body() req: productDto) {
     try{
       const eliminate = await this.productsService.deleteProduct(req);
+      return eliminate
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard,RolesGuard)
+  @Roles(Role.USER)
+  @Post('selectproduct')
+  async selectProduct(@Body() req: selectedProductsDto) {
+    try{
+      const addprod = await this.productsService.addSelectedProduct(req);
+      return addprod
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard)
+  @Get('getselectedproductslist')
+  async getSelectedProductsList() {
+    try{
+      const getList = await this.productsService.getselectedproducts();
+      return getList
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('getselectedproductbyid')
+  async getSelectedProductById(@Body() req: selectedProductsDto) {
+    try{
+      const getSelectedProd = await this.productsService.getselectedproductsbyid(req);
+      return getSelectedProd
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('getselectedproductsofuser')
+  async getSelectedProductsOfUser(@Body() req: selectedProductsDto) {
+    try{
+      const getProduct = await this.productsService.getselectedproductsofuser(req);
+      return getProduct
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.ADMIN,Role.STORE)
+  @Post('getselectedproductsofstore')
+  async getSelectedProductsOfStore(@Body() req: selectedProductsDto) {
+    try{
+      const getProduct = await this.productsService.getselectedproductsofstore(req);
+      return getProduct
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard)
+  @Post('updateselectedproducts')
+  async updateSelectedProduct(@Body() req: selectedProductsDto) {
+    try{
+      const moderate = await this.productsService.updateSelectedProduct(req);
+      return moderate
+    } catch(error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error,
+      }
+    }
+  }
+
+  @UseGuards(JwtGuard, RolesGuard)
+  @Roles(Role.ADMIN,Role.STORE)
+  @Post('deleteselectedproduct')
+  async deleteSelectedProduct(@Body() req: selectedProductsDto) {
+    try{
+      const eliminate = await this.productsService.deleteSelectedProduct(req);
       return eliminate
     } catch(error) {
       return {
