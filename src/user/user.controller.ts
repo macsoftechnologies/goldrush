@@ -80,58 +80,58 @@ export class UserController {
   @UseGuards(JwtGuard)
   @Get('/getuserlist')
   async getUsersList() {
-    try{
+    try {
       const findUser = await this.userService.getUsersList();
-      return findUser
-    }catch(error) {
+      return findUser;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   @UseGuards(JwtGuard)
   @Post('/getuser')
-  async getUserById(@Body() req: userDto ) {
-    try{
+  async getUserById(@Body() req: userDto) {
+    try {
       const findUser = await this.userService.getUserById(req);
-      return findUser
-    }catch(error) {
+      return findUser;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.USER)
+  @Roles(Role.ADMIN, Role.USER)
   @Post('/updateuser')
-  async updateUser(@Body() req: userDto ) {
-    try{
+  async updateUser(@Body() req: userDto) {
+    try {
       const moderate = await this.userService.updateUser(req);
-      return moderate
-    }catch(error) {
+      return moderate;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.USER)
+  @Roles(Role.ADMIN, Role.USER)
   @Post('/deleteuser')
-  async deleteUser(@Body() req: userDto ) {
-    try{
+  async deleteUser(@Body() req: userDto) {
+    try {
       const eliminate = await this.userService.deleteUser(req);
-      return eliminate
-    }catch(error) {
+      return eliminate;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
@@ -152,8 +152,8 @@ export class UserController {
   )
   async addStore(@Body() req: storeDto, @UploadedFiles() image) {
     try {
-      const addStore = await this.userService.createStore(req, image)
-      return addStore
+      const addStore = await this.userService.createStore(req, image);
+      return addStore;
     } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -178,33 +178,33 @@ export class UserController {
   @UseGuards(JwtGuard)
   @Get('/getstorelist')
   async getStoresList() {
-    try{
+    try {
       const findUser = await this.userService.getStoresList();
-      return findUser
-    }catch(error) {
+      return findUser;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   @UseGuards(JwtGuard)
   @Post('/getstore')
-  async getStoreById(@Body() req: storeDto ) {
-    try{
+  async getStoreById(@Body() req: storeDto) {
+    try {
       const findUser = await this.userService.getStoreById(req);
-      return findUser
-    }catch(error) {
+      return findUser;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
-  @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.STORE)
+  // @UseGuards(JwtGuard, RolesGuard)
+  // @Roles(Role.ADMIN, Role.STORE)
   @Post('/updatestore')
   @UseInterceptors(
     AnyFilesInterceptor({
@@ -221,29 +221,29 @@ export class UserController {
     }),
   )
   async updateStore(@Body() req: storeDto, @UploadedFiles() image) {
-    try{
-      const moderate = await this.userService.updateStore(req, image);
-      return moderate
-    }catch(error) {
+    try {
+      const moderate = await this.userService.storeUpdate(req, image);
+      return moderate;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   @UseGuards(JwtGuard, RolesGuard)
-  @Roles(Role.ADMIN,Role.STORE)
+  @Roles(Role.ADMIN, Role.STORE)
   @Post('/deletestore')
-  async deleteStore(@Body() req: storeDto ) {
-    try{
+  async deleteStore(@Body() req: storeDto) {
+    try {
       const eliminate = await this.userService.deleteStore(req);
-      return eliminate
-    }catch(error) {
+      return eliminate;
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 }

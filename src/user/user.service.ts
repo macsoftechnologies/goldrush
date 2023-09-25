@@ -21,7 +21,9 @@ export class UserService {
 
   async createAdmin(req: adminDto) {
     try {
-      const findAdmin = await this.adminModel.findOne({$or: [{ mobileNumber: req.mobileNumber },{ email: req.email }]});
+      const findAdmin = await this.adminModel.findOne({
+        $or: [{ mobileNumber: req.mobileNumber }, { email: req.email }],
+      });
       if (!findAdmin) {
         const bcryptPassword = await this.authService.hashPassword(
           req.password,
@@ -43,9 +45,11 @@ export class UserService {
     }
   }
 
-  async loginAdmin(req: adminDto){
+  async loginAdmin(req: adminDto) {
     try {
-      const findAdmin = await this.adminModel.findOne({$or: [{ mobileNumber: req.mobileNumber },{ email: req.email }]});
+      const findAdmin = await this.adminModel.findOne({
+        $or: [{ mobileNumber: req.mobileNumber }, { email: req.email }],
+      });
       //   console.log(findUser);
       if (!findAdmin) {
         return {
@@ -82,7 +86,9 @@ export class UserService {
 
   async createUser(req: userDto) {
     try {
-      const findUser = await this.userModel.findOne({ mobileNumber: req.mobileNumber });
+      const findUser = await this.userModel.findOne({
+        mobileNumber: req.mobileNumber,
+      });
       if (!findUser) {
         const bcryptPassword = await this.authService.hashPassword(
           req.password,
@@ -104,9 +110,11 @@ export class UserService {
     }
   }
 
-  async loginUser(req: userDto){
+  async loginUser(req: userDto) {
     try {
-      const findUser = await this.userModel.findOne({ mobileNumber: req.mobileNumber });
+      const findUser = await this.userModel.findOne({
+        mobileNumber: req.mobileNumber,
+      });
       //   console.log(findUser);
       if (!findUser) {
         return {
@@ -142,152 +150,161 @@ export class UserService {
   }
 
   async getUsersList() {
-    try{
+    try {
       const list = await this.userModel.find();
-      if(list) {
+      if (list) {
         return {
           statusCode: HttpStatus.OK,
-          message: "List of users",
+          message: 'List of users',
           usersList: list,
-        }
-      } else{
+        };
+      } else {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
-          messsage: "Invalid Request",
-        }
+          messsage: 'Invalid Request',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async getUserById(req: userDto) {
-    try{
-      const findUser = await this.userModel.findOne({userId: req.userId});
-      if(findUser) {
+    try {
+      const findUser = await this.userModel.findOne({ userId: req.userId });
+      if (findUser) {
         return {
           statusCode: HttpStatus.OK,
-          message: "User Details",
+          message: 'User Details',
           userDetails: findUser,
-        }
+        };
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "Unable to find User",
-        }
+          message: 'Unable to find User',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async updateUser(req: userDto) {
-    try{
-      const findUser = await this.userModel.findOne({userId: req.userId});
-      if(findUser) {
-        if(req.password) {
+    try {
+      const findUser = await this.userModel.findOne({ userId: req.userId });
+      if (findUser) {
+        if (req.password) {
           const bcryptPassword = await this.authService.hashPassword(
             req.password,
           );
-          const moderate = await this.userModel.updateOne({userId: req.userId}, {
-            $set: {
-              userName:req.userName,
-              mobileNumber: req.mobileNumber,
-              address: req.address,
-              password: bcryptPassword,
-              referralCode: req.referralCode,
-            }
-          });
-          if(moderate) {
+          const moderate = await this.userModel.updateOne(
+            { userId: req.userId },
+            {
+              $set: {
+                userName: req.userName,
+                mobileNumber: req.mobileNumber,
+                address: req.address,
+                password: bcryptPassword,
+                referralCode: req.referralCode,
+              },
+            },
+          );
+          if (moderate) {
             return {
               statusCode: HttpStatus.OK,
-              message: "Updated Successfully",
+              message: 'Updated Successfully',
               updatedStatus: moderate,
-            }
+            };
           } else {
             return {
               statusCode: HttpStatus.BAD_REQUEST,
-              message: "Invalid Request",
-            }
+              message: 'Invalid Request',
+            };
           }
         } else {
-          const moderate = await this.userModel.updateOne({userId: req.userId}, {
-            $set: {
-              userName:req.userName,
-              mobileNumber: req.mobileNumber,
-              address: req.address,
-              referralCode: req.referralCode,
-            }
-          });
-          if(moderate) {
+          const moderate = await this.userModel.updateOne(
+            { userId: req.userId },
+            {
+              $set: {
+                userName: req.userName,
+                mobileNumber: req.mobileNumber,
+                address: req.address,
+                referralCode: req.referralCode,
+              },
+            },
+          );
+          if (moderate) {
             return {
               statusCode: HttpStatus.OK,
-              message: "Updated Successfully",
+              message: 'Updated Successfully',
               updatedStatus: moderate,
-            }
+            };
           } else {
             return {
               statusCode: HttpStatus.BAD_REQUEST,
-              message: "Invalid Request",
-            }
+              message: 'Invalid Request',
+            };
           }
         }
-        
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "User not found",
-        }
+          message: 'User not found',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async deleteUser(req: userDto) {
-    try{
-      const findUser = await this.userModel.findOne({userId: req.userId});
-      if(findUser) {
-        const eliminate = await this.userModel.deleteOne({userId: req.userId});
-        if(eliminate) {
+    try {
+      const findUser = await this.userModel.findOne({ userId: req.userId });
+      if (findUser) {
+        const eliminate = await this.userModel.deleteOne({
+          userId: req.userId,
+        });
+        if (eliminate) {
           return {
             statusCode: HttpStatus.OK,
-            message: "Deleted Successfully",
+            message: 'Deleted Successfully',
             deletedStatus: eliminate,
             deletedUser: findUser,
-          }
+          };
         } else {
           return {
             statusCode: HttpStatus.BAD_REQUEST,
-            message: "Invalid Request",
-          }
+            message: 'Invalid Request',
+          };
         }
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "User Not Found",
-        }
+          message: 'User Not Found',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async createStore(req: storeDto, image) {
-    try{
-      const findStore = await this.storeModel.findOne({ mobileNumber: req.mobileNumber });
+    try {
+      const findStore = await this.storeModel.findOne({
+        mobileNumber: req.mobileNumber,
+      });
       if (!findStore) {
         if (image) {
           const reqDoc = image.map((doc, index) => {
@@ -298,7 +315,7 @@ export class UserService {
             const randomNumber = Math.floor(Math.random() * 1000000 + 1);
             return doc.filename;
           });
-  
+
           req.storeImage = reqDoc.toString();
         }
         const bcryptPassword = await this.authService.hashPassword(
@@ -313,17 +330,19 @@ export class UserService {
           message: 'Store is already existed',
         };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
-  async loginStore(req: storeDto){
+  async loginStore(req: storeDto) {
     try {
-      const findStore = await this.storeModel.findOne({ mobileNumber: req.mobileNumber });
+      const findStore = await this.storeModel.findOne({
+        mobileNumber: req.mobileNumber,
+      });
       //   console.log(findUser);
       if (!findStore) {
         return {
@@ -359,55 +378,55 @@ export class UserService {
   }
 
   async getStoresList() {
-    try{
+    try {
       const list = await this.storeModel.find();
-      if(list) {
+      if (list) {
         return {
           statusCode: HttpStatus.OK,
-          message: "List of Stores",
+          message: 'List of Stores',
           storesList: list,
-        }
-      } else{
+        };
+      } else {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
-          messsage: "Invalid Request",
-        }
+          messsage: 'Invalid Request',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async getStoreById(req: storeDto) {
-    try{
-      const findStore = await this.storeModel.findOne({storeId: req.storeId});
-      if(findStore) {
+    try {
+      const findStore = await this.storeModel.findOne({ storeId: req.storeId });
+      if (findStore) {
         return {
           statusCode: HttpStatus.OK,
-          message: "User Details",
+          message: 'User Details',
           userDetails: findStore,
-        }
+        };
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "Unable to find Store",
-        }
+          message: 'Unable to find Store',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async updateStore(req: storeDto, image) {
-    try{
-      const findStore = await this.storeModel.findOne({storeId: req.storeId});
-      if(findStore) {
+    try {
+      const findStore = await this.storeModel.findOne({ storeId: req.storeId });
+      if (findStore) {
         // console.log(findStore);
         if (image) {
           const reqDoc = image.map((doc, index) => {
@@ -418,146 +437,212 @@ export class UserService {
             const randomNumber = Math.floor(Math.random() * 1000000 + 1);
             return doc.filename;
           });
-  
+
           req.storeImage = reqDoc.toString();
         }
-        if(req.password) {
+        if (req.password) {
           const bcryptPassword = await this.authService.hashPassword(
             req.password,
           );
-          if(req.storeImage) {
-            const moderate = await this.storeModel.updateOne({storeId: req.storeId}, {
-              $set: {
-                storeName:req.storeName,
-                mobileNumber: req.mobileNumber,
-                storeLocation: req.storeLocation,
-                password: bcryptPassword,
-                storeImage: req.storeImage
-              }
-            });
-            if(moderate) {
+          if (req.storeImage) {
+            const moderate = await this.storeModel.updateOne(
+              { storeId: req.storeId },
+              {
+                $set: {
+                  storeName: req.storeName,
+                  mobileNumber: req.mobileNumber,
+                  // storeLocation: {
+                  //   longitude: req.storeLocation.longitude,
+                  //   latitude: req.storeLocation.latitude,
+                  // },
+                  password: bcryptPassword,
+                  storeImage: req.storeImage,
+                },
+              },
+            );
+            if (moderate) {
               return {
                 statusCode: HttpStatus.OK,
-                message: "Updated Successfully",
+                message: 'Updated Successfully',
                 updatedStatus: moderate,
-              }
+              };
             } else {
               return {
                 statusCode: HttpStatus.BAD_REQUEST,
-                message: "Invalid Request",
-              }
+                message: 'Invalid Request',
+              };
             }
           } else {
-            const moderate = await this.storeModel.updateOne({storeId: req.storeId}, {
-              $set: {
-                storeName:req.storeName,
-                mobileNumber: req.mobileNumber,
-                storeLocation: req.storeLocation,
-                password: bcryptPassword,
-              }
-            });
-            if(moderate) {
+            const moderate = await this.storeModel.updateOne(
+              { storeId: req.storeId },
+              {
+                $set: {
+                  storeName: req.storeName,
+                  mobileNumber: req.mobileNumber,
+                  storeLocation: req.storeLocation,
+                  password: bcryptPassword,
+                },
+              },
+            );
+            if (moderate) {
               return {
                 statusCode: HttpStatus.OK,
-                message: "Updated Successfully",
+                message: 'Updated Successfully',
                 updatedStatus: moderate,
-              }
+              };
             } else {
               return {
                 statusCode: HttpStatus.BAD_REQUEST,
-                message: "Invalid Request",
-              }
-            }
-          }
-         
-        } else {
-        if(req.storeImage) {
-          const moderate = await this.storeModel.updateOne({storeId: req.storeId}, {
-            $set: {
-              storeName:req.storeName,
-              mobileNumber: req.mobileNumber,
-              storeLocation: req.storeLocation,
-              storeImage: req.storeImage
-            }
-          });
-          if(moderate) {
-            return {
-              statusCode: HttpStatus.OK,
-              message: "Updated Successfully",
-              updatedStatus: moderate,
-            }
-          } else {
-            return {
-              statusCode: HttpStatus.BAD_REQUEST,
-              message: "Invalid Request",
+                message: 'Invalid Request',
+              };
             }
           }
         } else {
-          const moderate = await this.storeModel.updateOne({storeId: req.storeId}, {
-            $set: {
-              storeName:req.storeName,
-              mobileNumber: req.mobileNumber,
-              storeLocation: req.storeLocation,
-            }
-          });
-          if(moderate) {
-            return {
-              statusCode: HttpStatus.OK,
-              message: "Updated Successfully",
-              updatedStatus: moderate,
+          if (req.storeImage) {
+            const moderate = await this.storeModel.updateOne(
+              { storeId: req.storeId },
+              {
+                $set: {
+                  storeName: req.storeName,
+                  mobileNumber: req.mobileNumber,
+                  storeLocation: req.storeLocation,
+                  storeImage: req.storeImage,
+                },
+              },
+            );
+            if (moderate) {
+              return {
+                statusCode: HttpStatus.OK,
+                message: 'Updated Successfully',
+                updatedStatus: moderate,
+              };
+            } else {
+              return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: 'Invalid Request',
+              };
             }
           } else {
-            return {
-              statusCode: HttpStatus.BAD_REQUEST,
-              message: "Invalid Request",
+            const moderate = await this.storeModel.updateOne(
+              { storeId: req.storeId },
+              {
+                $set: {
+                  storeName: req.storeName,
+                  mobileNumber: req.mobileNumber,
+                  storeLocation: req.storeLocation,
+                },
+              },
+            );
+            if (moderate) {
+              return {
+                statusCode: HttpStatus.OK,
+                message: 'Updated Successfully',
+                updatedStatus: moderate,
+              };
+            } else {
+              return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: 'Invalid Request',
+              };
             }
           }
         }
-        }
-        
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "Store not found",
-        }
+          message: 'Store not found',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
-      }
+      };
     }
   }
 
   async deleteStore(req: storeDto) {
-    try{
-      const findStore = await this.storeModel.findOne({storeId: req.storeId});
-      if(findStore) {
-        const eliminate = await this.storeModel.deleteOne({storeId: req.storeId});
-        if(eliminate) {
+    try {
+      const findStore = await this.storeModel.findOne({ storeId: req.storeId });
+      if (findStore) {
+        const eliminate = await this.storeModel.deleteOne({
+          storeId: req.storeId,
+        });
+        if (eliminate) {
           return {
             statusCode: HttpStatus.OK,
-            message: "Deleted Successfully",
+            message: 'Deleted Successfully',
             deletedStatus: eliminate,
             deletedUser: findStore,
-          }
+          };
         } else {
           return {
             statusCode: HttpStatus.BAD_REQUEST,
-            message: "Invalid Request",
-          }
+            message: 'Invalid Request',
+          };
         }
       } else {
         return {
           statusCode: HttpStatus.NOT_FOUND,
-          message: "Store Not Found",
-        }
+          message: 'Store Not Found',
+        };
       }
-    } catch(error) {
+    } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: error,
+      };
+    }
+  }
+
+  async storeUpdate(req: storeDto, image) {
+    try {
+      const findStore = await this.storeModel.findOne({ storeId: req.storeId });
+      console.log(req, 'req...', image);
+      if (image) {
+        const reqDoc = image.map((doc, index) => {
+          let IsPrimary = false;
+          if (index == 0) {
+            IsPrimary = true;
+          }
+          const randomNumber = Math.floor(Math.random() * 1000000 + 1);
+          return doc.filename;
+        });
+
+        req.storeImage = reqDoc.toString();
       }
+      console.log(req.storeId, 'storeId...................');
+      console.log(req.storeLocation, 'longitude.........................');
+      const updatestoreResp = await this.storeModel.updateOne(
+        { storeId: req.storeId },
+        {
+          $set: {
+            storeName: req.storeName,
+            mobileNumber: req.mobileNumber,
+            storeLocation: JSON.parse(req.storeLocation),
+            storeImage: req.storeImage,
+          },
+        },
+      );
+      console.log(updatestoreResp);
+      const count = await this.storeModel.count();
+
+      if (updatestoreResp) {
+        return {
+          statusCode: HttpStatus.OK,
+          count: count,
+          updatestoreRes: updatestoreResp,
+        };
+      }
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Invalid Request',
+      };
+    } catch (error) {
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: error.message,
+      };
     }
   }
 }
