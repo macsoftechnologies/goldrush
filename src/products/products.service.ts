@@ -26,7 +26,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Category added successfully',
-          categoryDetails: add,
+          details: add,
         };
       } else {
         return {
@@ -49,7 +49,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Categories',
-          categoryList: getList,
+          details: getList,
         };
       } else {
         return {
@@ -74,7 +74,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Details of Category',
-          categoryList: getCategory,
+          details: getCategory,
         };
       } else {
         return {
@@ -106,7 +106,7 @@ export class ProductsService {
           return {
             statusCode: HttpStatus.OK,
             message: 'updated Successfully',
-            categoryList: moderate,
+            details: moderate,
           };
         } else {
           return {
@@ -141,7 +141,7 @@ export class ProductsService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Deleted Successfully',
-            deleteStatus: removecatgeory,
+            details: removecatgeory,
           };
         } else {
           return {
@@ -182,7 +182,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Product Added Successfully',
-          productDetails: addProduct,
+          details: addProduct,
         };
       } else {
         return {
@@ -223,7 +223,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Products',
-          productsList: list,
+          details: list,
         };
       } else {
         return {
@@ -267,7 +267,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Details of the product',
-          productDetails: product,
+          details: product,
         };
       } else {
         return {
@@ -309,7 +309,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Products based on goldtype',
-          productsList: list,
+          details: list,
         };
       } else {
         return {
@@ -371,7 +371,7 @@ export class ProductsService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Updated Successfully',
-            updatedStatus: moderate,
+            details: moderate,
           };
         } else {
           return {
@@ -401,7 +401,7 @@ export class ProductsService {
       );
       return {
         statusCode: HttpStatus.OK,
-        removeImg: removeProductImage,
+        details: removeProductImage,
       };
     } catch (error) {
       return {
@@ -420,7 +420,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Deleted Successfully',
-          deletedStatus: removeProduct,
+          details: removeProduct,
         };
       } else {
         return {
@@ -452,7 +452,7 @@ export class ProductsService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Product Selected Successfully',
-            selectedProductDetails: addSelectProduct,
+            details: addSelectProduct,
           };
         } else {
           return {
@@ -506,7 +506,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of selected Products',
-          selctedProductsList: list,
+          details: list,
         };
       } else {
         return {
@@ -555,7 +555,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of selected Product',
-          selctedProductsList: list,
+          details: list,
         };
       } else {
         return {
@@ -604,7 +604,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of selected Products of User',
-          selctedProductsList: list,
+          details: list,
         };
       } else {
         return {
@@ -653,7 +653,7 @@ export class ProductsService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of selected Products of Store',
-          selctedProductsList: list,
+          details: list,
         };
       } else {
         return {
@@ -686,7 +686,7 @@ export class ProductsService {
             statusCode: HttpStatus.OK,
             message:
               'Selected Product Status has Chnaged to ${req.requestStatus}',
-            updatedStatus: moderate,
+              details: moderate,
           };
         } else {
           return {
@@ -712,7 +712,7 @@ export class ProductsService {
                 return {
                     statusCode: HttpStatus.OK,
                     message: "Selected Product Deleted",
-                    deleteStatus: eliminate,
+                    details: eliminate,
                 }
             } else {
                 return {

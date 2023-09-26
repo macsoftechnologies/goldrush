@@ -17,7 +17,7 @@ export class OffersService {
                 return {
                     statusCode: HttpStatus.OK,
                     message: "Offer Added Successfully",
-                    offerDetails: addoffer,
+                    details: addoffer,
                 }
             } else {
                 return {
@@ -51,7 +51,7 @@ export class OffersService {
                 return {
                     statusCode: HttpStatus.OK,
                     message: "List of Offers",
-                    offerDetails: list,
+                    details: list,
                 }
             } else {
                 return {
@@ -85,7 +85,7 @@ export class OffersService {
                 return {
                     statusCode: HttpStatus.OK,
                     message: "Offer Details",
-                    offerDetails: offerDetail,
+                    details: offerDetail,
                 }
             } else {
                 return {
@@ -115,7 +115,7 @@ export class OffersService {
                     return {
                         statusCode: HttpStatus.OK,
                         message: "Offer Details",
-                        updateStatus: updateoffer,
+                        details: updateoffer,
                     }
                 } else {
                     return {
@@ -146,7 +146,7 @@ export class OffersService {
                     return {
                         statusCode: HttpStatus.OK,
                         message: "Offer Details",
-                        deleteStatus: removeoffer,
+                        details: removeoffer,
                     }
                 } else {
                     return {

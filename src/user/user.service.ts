@@ -30,7 +30,11 @@ export class UserService {
         );
         req.password = bcryptPassword;
         const addAdmin = await this.adminModel.create(req);
-        return addAdmin;
+        return {
+          statusCode: HttpStatus.OK,
+          message: "Admin added Successfully",
+          details: addAdmin,
+        }
       } else {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
@@ -66,8 +70,10 @@ export class UserService {
           const jwtToken = await this.authService.createToken({ findAdmin });
           //   console.log(jwtToken);
           return {
+            statusCode: HttpStatus.OK,
+            message: "Admin Login successfull",
             token: jwtToken,
-            adminData: findAdmin,
+            details: findAdmin,
           };
         } else {
           return {
@@ -95,7 +101,11 @@ export class UserService {
         );
         req.password = bcryptPassword;
         const addUser = await this.userModel.create(req);
-        return addUser;
+        return {
+          statusCode: HttpStatus.OK,
+          message: "User added successfully",
+          details: addUser,
+        }
       } else {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
@@ -131,8 +141,10 @@ export class UserService {
           const jwtToken = await this.authService.createToken({ findUser });
           //   console.log(jwtToken);
           return {
+            statusCode: HttpStatus.OK,
+            message: "User Login successfull",
             token: jwtToken,
-            userData: findUser,
+            details: findUser,
           };
         } else {
           return {
@@ -156,7 +168,7 @@ export class UserService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of users',
-          usersList: list,
+          details: list,
         };
       } else {
         return {
@@ -179,7 +191,7 @@ export class UserService {
         return {
           statusCode: HttpStatus.OK,
           message: 'User Details',
-          userDetails: findUser,
+          details: findUser,
         };
       } else {
         return {
@@ -219,7 +231,7 @@ export class UserService {
             return {
               statusCode: HttpStatus.OK,
               message: 'Updated Successfully',
-              updatedStatus: moderate,
+              details: moderate,
             };
           } else {
             return {
@@ -243,7 +255,7 @@ export class UserService {
             return {
               statusCode: HttpStatus.OK,
               message: 'Updated Successfully',
-              updatedStatus: moderate,
+              details: moderate,
             };
           } else {
             return {
@@ -277,7 +289,7 @@ export class UserService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Deleted Successfully',
-            deletedStatus: eliminate,
+            details: eliminate,
             deletedUser: findUser,
           };
         } else {
@@ -323,7 +335,11 @@ export class UserService {
         );
         req.password = bcryptPassword;
         const addStore = await this.storeModel.create(req);
-        return addStore;
+        return {
+          statusCode: HttpStatus.OK,
+          message: "Store Created Successfully",
+          details: addStore,
+        }
       } else {
         return {
           statusCode: HttpStatus.BAD_REQUEST,
@@ -359,8 +375,10 @@ export class UserService {
           const jwtToken = await this.authService.createToken({ findStore });
           //   console.log(jwtToken);
           return {
+            statusCode: HttpStatus.OK,
+            message: "Store Login successfull",
             token: jwtToken,
-            userData: findStore,
+            details: findStore,
           };
         } else {
           return {
@@ -384,7 +402,7 @@ export class UserService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Stores',
-          storesList: list,
+          details: list,
         };
       } else {
         return {
@@ -407,7 +425,7 @@ export class UserService {
         return {
           statusCode: HttpStatus.OK,
           message: 'User Details',
-          userDetails: findStore,
+          details: findStore,
         };
       } else {
         return {
@@ -464,7 +482,7 @@ export class UserService {
               return {
                 statusCode: HttpStatus.OK,
                 message: 'Updated Successfully',
-                updatedStatus: moderate,
+                details: moderate,
               };
             } else {
               return {
@@ -488,7 +506,7 @@ export class UserService {
               return {
                 statusCode: HttpStatus.OK,
                 message: 'Updated Successfully',
-                updatedStatus: moderate,
+                details: moderate,
               };
             } else {
               return {
@@ -514,7 +532,7 @@ export class UserService {
               return {
                 statusCode: HttpStatus.OK,
                 message: 'Updated Successfully',
-                updatedStatus: moderate,
+                details: moderate,
               };
             } else {
               return {
@@ -537,7 +555,7 @@ export class UserService {
               return {
                 statusCode: HttpStatus.OK,
                 message: 'Updated Successfully',
-                updatedStatus: moderate,
+                details: moderate,
               };
             } else {
               return {
@@ -572,7 +590,7 @@ export class UserService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Deleted Successfully',
-            deletedStatus: eliminate,
+            details: eliminate,
             deletedUser: findStore,
           };
         } else {
@@ -611,33 +629,122 @@ export class UserService {
 
         req.storeImage = reqDoc.toString();
       }
-      console.log(req.storeId, 'storeId...................');
-      console.log(req.storeLocation, 'longitude.........................');
-      const updatestoreResp = await this.storeModel.updateOne(
-        { storeId: req.storeId },
-        {
-          $set: {
-            storeName: req.storeName,
-            mobileNumber: req.mobileNumber,
-            storeLocation: JSON.parse(req.storeLocation),
-            storeImage: req.storeImage,
-          },
-        },
-      );
-      console.log(updatestoreResp);
-      const count = await this.storeModel.count();
-
-      if (updatestoreResp) {
-        return {
-          statusCode: HttpStatus.OK,
-          count: count,
-          updatestoreRes: updatestoreResp,
-        };
+      //console.log(req.storeId, 'storeId...................');
+      //console.log(req.storeLocation, 'longitude.........................');
+      if(req.password) {
+        const bcryptPassword = await this.authService.hashPassword(
+          req.password,
+        );
+        if(req.storeImage) {
+          const updatestoreResp = await this.storeModel.updateOne(
+            { storeId: req.storeId },
+            {
+              $set: {
+                storeName: req.storeName,
+                mobileNumber: req.mobileNumber,
+                storeLocation: JSON.parse(req.storeLocation),
+                storeImage: req.storeImage,
+                password: bcryptPassword,
+              },
+            },
+          );
+          console.log(updatestoreResp);
+          const count = await this.storeModel.count();
+    
+          if (updatestoreResp) {
+            return {
+              statusCode: HttpStatus.OK,
+              count: count,
+              details: updatestoreResp,
+            };
+          } else {
+            return {
+              statusCode: HttpStatus.BAD_REQUEST,
+              message: 'Invalid Request',
+            }
+          }
+        } else {
+          const updatestoreResp = await this.storeModel.updateOne(
+            { storeId: req.storeId },
+            {
+              $set: {
+                storeName: req.storeName,
+                mobileNumber: req.mobileNumber,
+                storeLocation: JSON.parse(req.storeLocation),
+                password: bcryptPassword,
+              },
+            },
+          );
+          console.log(updatestoreResp);
+          const count = await this.storeModel.count();
+    
+          if (updatestoreResp) {
+            return {
+              statusCode: HttpStatus.OK,
+              count: count,
+              details: updatestoreResp,
+            };
+          }
+          return {
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'Invalid Request',
+          };
+        }
+      } else {
+        if(req.storeImage) {
+          const updatestoreResp = await this.storeModel.updateOne(
+            { storeId: req.storeId },
+            {
+              $set: {
+                storeName: req.storeName,
+                mobileNumber: req.mobileNumber,
+                storeLocation: JSON.parse(req.storeLocation),
+                storeImage: req.storeImage,
+              },
+            },
+          );
+          console.log(updatestoreResp);
+          const count = await this.storeModel.count();
+    
+          if (updatestoreResp) {
+            return {
+              statusCode: HttpStatus.OK,
+              count: count,
+              details: updatestoreResp,
+            };
+          } else {
+            return {
+              statusCode: HttpStatus.BAD_REQUEST,
+              message: 'Invalid Request',
+            }
+          }
+        } else {
+          const updatestoreResp = await this.storeModel.updateOne(
+            { storeId: req.storeId },
+            {
+              $set: {
+                storeName: req.storeName,
+                mobileNumber: req.mobileNumber,
+                storeLocation: JSON.parse(req.storeLocation),
+              },
+            },
+          );
+          console.log(updatestoreResp);
+          const count = await this.storeModel.count();
+    
+          if (updatestoreResp) {
+            return {
+              statusCode: HttpStatus.OK,
+              count: count,
+              details: updatestoreResp,
+            };
+          }
+          return {
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'Invalid Request',
+          };
+        }
       }
-      return {
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: 'Invalid Request',
-      };
     } catch (error) {
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

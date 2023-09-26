@@ -28,7 +28,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Call Has Schedule Successfully',
-          scheduledDetails: schedule,
+          details: schedule,
         };
       } else {
         return {
@@ -68,7 +68,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of call schedules',
-          list: getlist,
+          details: getlist,
         };
       } else {
         return {
@@ -109,7 +109,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Call Details',
-          list: getlist,
+          details: getlist,
         };
       } else {
         return {
@@ -150,7 +150,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Call Details',
-          list: getlist,
+          details: getlist,
         };
       } else {
         return {
@@ -191,7 +191,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Call Details',
-          list: getlist,
+          details: getlist,
         };
       } else {
         return {
@@ -223,7 +223,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Scheduled Call Updated Successfully',
-          updateStatus: moderate,
+          details: moderate,
         };
       } else {
         return {
@@ -248,7 +248,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Deleted Successfully',
-          deleteStatus: eliminate,
+          details: eliminate,
         };
       } else {
         return {
@@ -287,7 +287,7 @@ export class OthersService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Product Added Successfully',
-            productDetails: addAD,
+            details: addAD,
           };
         } else {
           return {
@@ -325,7 +325,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'List of Ads',
-          adsList: list,
+          details: list,
         };
       } else {
         return {
@@ -358,7 +358,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Advertisement Details',
-          adsList: list,
+          details: list,
         };
       } else {
         return {
@@ -391,7 +391,7 @@ export class OthersService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Advertisements Of Store',
-          adsList: list,
+          details: list,
         };
       } else {
         return {
@@ -445,7 +445,7 @@ export class OthersService {
           return {
             statusCode: HttpStatus.OK,
             message: 'Updated Successfully',
-            updatedStatus: moderate,
+            details: moderate,
           };
         } else {
           return {
@@ -475,7 +475,7 @@ export class OthersService {
       );
       return {
         statusCode: HttpStatus.OK,
-        removeImg: removeProductImage,
+        details: removeProductImage,
       };
     } catch (error) {
       return {
@@ -493,7 +493,7 @@ export class OthersService {
             return {
                 statusCode: HttpStatus.OK,
                 message: "Advertisement Deleted Successfully",
-                deleteStatus: eliminate,
+                details: eliminate,
             }
         } else {
             return {
