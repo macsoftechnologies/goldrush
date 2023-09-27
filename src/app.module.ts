@@ -17,6 +17,7 @@ import { OthersModule } from './others/others.module';
     AuthModule,
     UserModule,
     MongooseModule.forRoot(
+      //'mongodb+srv://macsof:macsof@nextlevelcarwash.yjs3i.mongodb.net/goldrush?retryWrites=true&w=majority',
       'mongodb+srv://macsof:macsof@nextlevelcarwash.yjs3i.mongodb.net/goldrush?retryWrites=true&w=majority',
     ),
     ConfigModule.forRoot(),
